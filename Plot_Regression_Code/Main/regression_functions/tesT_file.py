@@ -1,0 +1,33 @@
+self.base_path_time_series = Path.cwd().absolute().parent
+self.kwargs_transform_path = self.base_path_time_series / 'tif_meta_data/kwargs_tif.json'
+self.binary_spatial_array_path = self.base_path_time_series / 'Binary_Spatial_Arrays'
+self.tsout_path_months = self.base_path_time_series / 'Data_used_regression/MSBAS_TSOUT_months.json'
+self.tsout_path_all = self.base_path_time_series / 'Data_used_regression/MSBAS_TSOUT_all.json'
+self.time_series_path = self.base_path_time_series / 'Time_Series_Plots'
+self.time_series_save_name = self.time_series_path / ('Time_Series_' + time_series_save_name + '.png')
+self.to_mm = 1000
+self.lon_list = lon_list
+self.lat_list = lat_list
+self.half_size = half_size
+kwargs_open = general_functions.open_json_file(self.kwargs_transform_path)
+self.transform_list = kwargs_open['transform']
+tsout_open_month = general_functions.open_json_file(self.tsout_path_months)
+tsout_open_all = general_functions.open_json_file(self.tsout_path_all)
+self.times_month = np.array([float(x) for x in tsout_open_month['YYYY.YYY']])
+self.times_month_shifted = self.times_month - np.min(self.times_month)
+self.times_all = np.array([float(x) for x in tsout_open_all['YYYY.YYY']])
+self.times_all_shifted = self.times_all - np.min(self.times_all)
+msbas_used_np_month = tsout_open_month['msbas_file_names']
+msbas_used_np_all = tsout_open_all['msbas_file_names']
+test_nps_months = [Path(str(self.binary_spatial_array_path) + '/' + x) for x in msbas_used_np_month]
+test_nps_months.sort()
+test_nps_all = [Path(str(self.binary_spatial_array_path) + '/' + x) for x in msbas_used_np_all]
+test_nps_all.sort()
+self.binary_spatial_arrays_months = test_nps_months
+self.binary_spatial_arrays_all = test_nps_all
+self.def_months = None
+self.coeff_months = None
+self.def_all = None
+self.coeff_all = None
+self.ylim_min = None
+self.ylim_max = None
